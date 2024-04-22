@@ -1,14 +1,19 @@
 const nodemailer = require("nodemailer");
-const sendGridTransport = require("nodemailer-sendgrid-transport");
+
 
 //transport
-const transporter = nodemailer.createTransport(
-  sendGridTransport({
-    auth: {
-      api_key: process.env.API_SENDGRID,
-    },
-  })
-);
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    type: 'OAuth2',
+    user: process.env.MAIL_USERNAME,
+    pass: process.env.MAIL_PASSWORD,
+    clientId: process.env.OAUTH_CLIENTID,
+    clientSecret: process.env.OAUTH_CLIENT_SECRET,
+    refreshToken: process.env.OAUTH_REFRESH_TOKEN
+  }
+})
+
 
 const sendEmailController = (req, res) => {
   try {
@@ -23,16 +28,14 @@ const sendEmailController = (req, res) => {
     }
     //email matter
     transporter.sendMail({
-      to: "vipanshijindal008@gmail.com@gmail.com",
-      from: "vipanshijindal008@gmail.com@gmail.com",
-      subject: "Regarding Mern Portfolio App",
+      to: "vipanshijindal@gmail.com",
+      from: "vipanshijindal008@gmail.com",
+      subject: "Regarding your Query",
       html: `
-        <h5>Detail Information</h5>
-        <ul>
-          <li><p>Name : ${name}</p></li>
-          <li><p>Email : ${email}</p></li>
-          <li><p>Message : ${msg}</p></li>
-        </ul>
+        <h5>Welcome to our services</h5>
+       <p> Hi ${name}</p>
+       <p> we have received your query regarding web services we will contact you shortly . </p>
+       <p>Thanks and regards</p>
       `,
     });
 
